@@ -9,9 +9,9 @@
 <body>
   <h1>Hit a mole!</h1>
   <h2>Choose level then click START!</h2>
-  <button class="button-level button-basic" onClick="levelBasic()">Basic</button>
-  <button class="button-level button-medium" onClick="levelMedium()">Medium</button>
-  <button class="button-level button-expert" onClick="levelExpert()">Expert</button>
+  <button class="button-level button-basic">Basic</button>
+  <button class="button-level button-medium">Medium</button>
+  <button class="button-level button-expert">Expert</button>
   <h3>Scroll down</h3>
   
   <div class="game">
@@ -131,6 +131,9 @@ function hit(e) {
 }
     
 moles.forEach(mole => mole.addEventListener('click', hit));
+basic.addEventListener('click', levelBasic);
+medium.addEventListener('click', levelMedium);
+expert.addEventListener('click', levelExpert);
     
 </script>
 </body>
