@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hit a mole!</title>
+  <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Hit a mole!</h1>
+  <h2>Choose level then click START!</h2>
+  <button class="button-level button-basic" onClick="levelBasic()">Basic</button>
+  <button class="button-level button-medium" onClick="levelMedium()">Medium</button>
+  <button class="button-level button-expert" onClick="levelExpert()">Expert</button>
+  <h3>Scroll down</h3>
+  
+  <div class="game">
+    <div class="hole hole1">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole2">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole3">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole4">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole5">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole6">
+      <div class="mole"></div>
+    </div>
+  </div>
+
+  <h2>Score:<span class="score">0</span></h2>
+  <button class="button-start" onClick="startGame()">Start!</button>
+  
+
+<script>
+  const holes = document.querySelectorAll('.hole');
+  const scoreBoard = document.querySelector('.score');
+  const moles = document.querySelectorAll('.mole');
+  const basic = document.querySelector('.button-basic');
+  const medium = document.querySelector('.button-medium');
+  const expert = document.querySelector('.button-expert');
+  let lastHole;
+  let timeUp = false; 
+  let score = 0;
+  let level = 0;
+  function randomTime(min, max){
+      return Math.round(Math.random() * (max - min) + min);
+  }    
+    
+function randomHole(holes){
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    if (hole === lastHole){
+        console.log('same');
+        return randomHole(holes);
+    }
+    
+    lastHole = hole;
+    return hole;
+}    
+
+function levelBasic() {
+    level = 1;
+    basic.classList.add('button-active');
+    medium.classList.remove('button-active');
+    expert.classList.remove('button-active');
+}   
+    
+function levelMedium() {
+    level = 2;
+    medium.classList.add('button-active');
+    basic.classList.remove('button-active');
+    expert.classList.remove('button-active');
+}   
+
+function levelExpert() {
+    level = 3;
+    expert.classList.add('button-active');
+    basic.classList.remove('button-active');
+    medium.classList.remove('button-active');
+}       
+    
+function peep() {
+    let time = 0;
+    if(level == 1) {
+        time = randomTime(200,1000);
+    }
+    else if (level == 2) {
+        time = randomTime(150,800);
+    }    
+    else if (level == 3) {
+        time = randomTime(100,500);
+    }
+    else if (level == 0) {
+        alert('Choose level!');
+        level = 4;
+    }
+    else if (level == 4) {
+        level = 0;
+        return;
+    }
+    const hole = randomHole(holes);
+    hole.classList.add('up');
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if (!timeUp) peep();
+      else {alert('Time is up, your score: ' +score)};
+    }, time);
+}   
+    
+function startGame() {
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    score = 0;
+    peep();
+    setTimeout( ()=> timeUp=true, 10000);
+}    
+    
+function hit(e) {
+    if(!e.isTrusted) return;
+    score++;
+    this.classList.remove('up');
+    scoreBoard.textContent = score;
+}
+    
+moles.forEach(mole => mole.addEventListener('click', hit));
+    
+</script>
+</body>
+</html>
